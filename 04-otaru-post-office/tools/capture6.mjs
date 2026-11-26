@@ -1,0 +1,17 @@
+﻿import { chromium } from 'playwright-core';
+const browser = await chromium.launch({ executablePath: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe', headless: true, args: ['--disable-gpu-sandbox','--force-device-scale-factor=1','--enable-gpu'] });
+const page = await browser.newPage({ viewport: { width: 1600, height: 1000 } });
+const errors=[]; page.on('pageerror',e=>errors.push(e.message)); page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
+await page.goto('file:///F:/杂活/小樽丰川邮局.html?skip=1&debugtime=1', {waitUntil:'load'});
+await page.waitForFunction(()=>window.__DIORAMA__, null, {timeout:60000});
+await page.evaluate(()=>window.__DIORAMA__.setTime(12));
+await page.waitForTimeout(400);
+await page.screenshot({path:'post-office-src/shots/sixth-final.png'});
+await page.evaluate(()=>window.__DIORAMA__.setView([3.7,4.0,5.9],[-.2,2.2,-.2]));
+await page.waitForTimeout(400);
+await page.screenshot({path:'post-office-src/shots/sixth-zoom.png'});
+await page.evaluate(()=>{const d=window.__DIORAMA__; d.controls.minDistance=0.1; d.setView([10.2,3.0,8.6],[6.9,1.0,6.7]);});
+await page.waitForTimeout(400);
+await page.screenshot({path:'post-office-src/shots/sixth-car.png'});
+console.log(errors);
+await browser.close();

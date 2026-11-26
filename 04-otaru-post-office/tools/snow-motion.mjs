@@ -1,0 +1,12 @@
+﻿import { chromium } from 'playwright-core';
+const browser = await chromium.launch({ executablePath: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe', headless: true, args: ['--disable-gpu-sandbox','--force-device-scale-factor=1','--enable-gpu'] });
+const page = await browser.newPage({ viewport: { width: 1600, height: 1000 } });
+await page.goto('file:///F:/杂活/小樽丰川邮局.html?skip=1&debugtime=1', {waitUntil:'load'});
+await page.waitForFunction(()=>window.__DIORAMA__, null, {timeout:60000});
+await page.evaluate(()=>window.__DIORAMA__.setTime(8));
+await page.waitForTimeout(250);
+await page.screenshot({path:'post-office-src/shots/snow-t8.png'});
+await page.evaluate(()=>window.__DIORAMA__.setTime(9.2));
+await page.waitForTimeout(250);
+await page.screenshot({path:'post-office-src/shots/snow-t9.png'});
+await browser.close();

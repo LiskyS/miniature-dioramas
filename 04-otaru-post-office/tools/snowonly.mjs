@@ -1,0 +1,12 @@
+﻿import { chromium } from 'playwright-core';
+const browser = await chromium.launch({ executablePath: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe', headless: true, args: ['--disable-gpu-sandbox','--force-device-scale-factor=1','--enable-gpu'] });
+const page = await browser.newPage({ viewport: { width: 1200, height: 800 } });
+await page.goto('file:///F:/杂活/小樽丰川邮局.html?skip=1&debugtime=1', {waitUntil:'load'});
+await page.waitForFunction(()=>window.__DIORAMA__, null, {timeout:60000});
+await page.evaluate(()=>{const d=window.__DIORAMA__; d.scene.traverse(o=>{if(o.isMesh||o.isPoints)o.visible=false;}); d.snow.mesh.visible=true; d.scene.background=new (d.THREE.Color)(0x000000); d.setTime(8);});
+await page.waitForTimeout(300);
+await page.screenshot({path:'post-office-src/shots/snowonly-t8.png'});
+await page.evaluate(()=>window.__DIORAMA__.setTime(9));
+await page.waitForTimeout(300);
+await page.screenshot({path:'post-office-src/shots/snowonly-t9.png'});
+await browser.close();

@@ -1,0 +1,11 @@
+﻿import { chromium } from 'playwright-core';
+const browser = await chromium.launch({ executablePath: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe', headless: true, args: ['--disable-gpu-sandbox','--force-device-scale-factor=1','--enable-gpu'] });
+const page = await browser.newPage({ viewport: { width: 1200, height: 760 } });
+const errors=[]; page.on('pageerror',e=>errors.push(e.message)); page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
+await page.goto('file:///F:/杂活/小樽丰川邮局.html', {waitUntil:'load'});
+await page.waitForFunction(()=>window.__DIORAMA__, null, {timeout:60000});
+await page.waitForTimeout(1500);
+const meta=await page.evaluate(()=>({title:document.title, theme:document.querySelector('meta[name=theme-color]')?.content, bg:getComputedStyle(document.body).backgroundColor, htmlBg:getComputedStyle(document.documentElement).backgroundColor, lang:document.documentElement.lang, childTags:[...document.body.children].map(e=>e.tagName), canvas:document.querySelectorAll('canvas').length, aria:document.querySelector('canvas')?.getAttribute('aria-label')}));
+await page.screenshot({path:'post-office-src/shots/title-check.png'});
+console.log(JSON.stringify({meta,errors},null,2));
+await browser.close();

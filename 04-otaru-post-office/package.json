@@ -1,0 +1,14 @@
+{
+  "name": "otaru-post-office-diorama",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/main.js --bundle --minify --format=iife --platform=browser --target=es2020 --outfile=src/app.js"
+  },
+  "dependencies": {
+    "esbuild": "^0.28.2",
+    "playwright-core": "^1.64.1",
+    "three": "^0.187.0"
+  }
+}
